@@ -2,6 +2,7 @@ package imgp
 
 import (
 	_ "embed"
+	"fmt"
 	"strings"
 )
 
@@ -25,4 +26,33 @@ func init() {
 		wordToInt[word] = i
 		intToWord[i] = word
 	}
+}
+
+func WordsToInts(words string) ([]int, error) {
+	splitted := strings.Fields(words)
+	_ = splitted
+
+	result := make([]int, len(splitted))
+	for i, word := range splitted {
+		num, ok := wordToInt[word]
+		if !ok {
+			return nil, fmt.Errorf(`mapping for word "%s" doesn't exist`, word)
+		}
+		result[i] = num
+	}
+
+	return result, nil
+}
+
+func IntsToWords(numbers []int) ([]string, error) {
+	result := make([]string, len(numbers))
+	for i, num := range numbers {
+		word, ok := intToWord[num]
+		if !ok {
+			return nil, fmt.Errorf(`mapping for number "%d" doesn't exist`, num)
+		}
+		result[i] = word
+	}
+
+	return result, nil
 }
