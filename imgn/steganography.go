@@ -6,9 +6,8 @@ import (
 )
 
 const (
-	LsbsPerPixel  = 3                                  // Red, Green, Blue.
-	WordBitLength = 11                                 // log_2(2048).
-	PixelsPerWord = (WordBitLength + 1) / LsbsPerPixel // Adding 1 so that division is without remainder.
+	LsbsPerPixel  = 3  // Red, Green, Blue.
+	WordBitLength = 11 // log_2(2048).
 )
 
 func HideInImage(imgPath string, mnemonic string) (string, error) {
@@ -61,29 +60,23 @@ func hideNumbersInPixels(numbers []int, image Image) error {
 	// TODO: Add support for hiding information in more than one row of pixels.
 	row := image.Pixels[0]
 
-	for i, number := range numbers {
-		// Grab 4 pixels.
-		low := i * PixelsPerWord
-		high := low + PixelsPerWord
-		chunk := row[low:high]
-
-		index := 0
-
+	index := 0
+	for _, number := range numbers {
 		// Iterate over number (which represents a word), 3 bits at a
 		//	time (starting from LSb).
 		for j := 0; j < WordBitLength; j += LsbsPerPixel {
-			pixel := chunk[index]
+			pixel := &row[index]
 
 			// Red.
-			chunk[index].R = (pixel.R & (^1)) | (number & 1)
+			pixel.R = (pixel.R & (^1)) | (number & 1)
 			number >>= 1
 
 			// Green.
-			chunk[index].G = (pixel.G & (^1)) | (number & 1)
+			pixel.G = (pixel.G & (^1)) | (number & 1)
 			number >>= 1
 
 			// Blue.
-			chunk[index].B = (pixel.B & (^1)) | (number & 1)
+			pixel.B = (pixel.B & (^1)) | (number & 1)
 			number >>= 1
 
 			index++
@@ -97,21 +90,15 @@ func extractNumbersFromPixels(image Image) []int {
 	// TODO: Add support for hiding information in more than one row of pixels.
 	row := image.Pixels[0]
 
+	index := 0
 	numbers := make([]int, WordsInMnemonic)
 
 	for i := range WordsInMnemonic {
-		// Grab 4 pixels.
-		low := i * PixelsPerWord
-		high := low + PixelsPerWord
-		chunk := row[low:high]
-
-		index := 0
-
 		// Reconstruct number by extracting LSbs from pixels
 		k := 1
 		number := 0b0
 		for j := 0; j < WordBitLength; j += LsbsPerPixel {
-			pixel := chunk[index]
+			pixel := &row[index]
 
 			// Red.
 			number += (k * (pixel.R & 1))
