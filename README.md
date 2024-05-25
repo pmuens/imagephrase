@@ -1,4 +1,4 @@
-# Imagephrase
+# Imgnemonic
 
 A CLI tool that allows you to hide your [BIP-39](https://github.com/bitcoin/bips/blob/master/bip-0039.mediawiki) mnemonic in an image.
 
@@ -21,8 +21,8 @@ In an upcoming version of this tool I plan to add support for a combination of e
 1. `git clone <url>`
 2. `cd <name>`
 3. `cat mnemonic.txt`
-4. `go run ./cmd/imgp hide -image-path ./photo.png -mnemonic "$(cat mnemonic.txt)"`
-5. `go run ./cmd/imgp reveal -image-path ./photo.modified.png`
+4. `go run ./cmd/imgn hide -image-path ./photo.png -mnemonic "$(cat mnemonic.txt)"`
+5. `go run ./cmd/imgn reveal -image-path ./photo.modified.png`
 
 ## Useful Commands
 

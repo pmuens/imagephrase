@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/pmuens/imagephrase/imgp"
+	"github.com/pmuens/imgnemonic/imgn"
 )
 
 const (
@@ -54,7 +54,7 @@ func run(e *env) error {
 }
 
 func runHide(e *env, c *hideConfig) error {
-	imgPath, err := imgp.HideInImage(c.imgPath, c.mnemonic)
+	imgPath, err := imgn.HideInImage(c.imgPath, c.mnemonic)
 	if err != nil {
 		return err
 	}
@@ -65,7 +65,7 @@ func runHide(e *env, c *hideConfig) error {
 }
 
 func runReveal(e *env, c *revealConfig) error {
-	mnemonic, err := imgp.RevealFromImage(c.imgPath)
+	mnemonic, err := imgn.RevealFromImage(c.imgPath)
 	if err != nil {
 		return err
 	}

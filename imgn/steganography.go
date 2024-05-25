@@ -1,4 +1,4 @@
-package imgp
+package imgn
 
 import (
 	"path/filepath"

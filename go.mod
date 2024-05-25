@@ -1,3 +1,3 @@
-module github.com/pmuens/imagephrase
+module github.com/pmuens/imgnemonic
 
 go 1.22.1

@@ -7,7 +7,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/pmuens/imagephrase/imgp"
+	"github.com/pmuens/imgnemonic/imgn"
 )
 
 type env struct {
@@ -26,7 +26,7 @@ type revealConfig struct {
 }
 
 func parseHideArgs(c *hideConfig, args []string, stderr io.Writer) error {
-	fs := flag.NewFlagSet("imgp", flag.ContinueOnError)
+	fs := flag.NewFlagSet("imgn", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 
 	fs.Usage = func() {
@@ -58,7 +58,7 @@ func validateHideArgs(c *hideConfig) error {
 		return argError(c.mnemonic, "flag -mnemonic", errors.New("should not be empty"))
 	}
 
-	if words := strings.Fields(c.mnemonic); len(words) != imgp.WordsInMnemonic {
+	if words := strings.Fields(c.mnemonic); len(words) != imgn.WordsInMnemonic {
 		return argError(c.mnemonic, "mnemonic", errors.New("should be 12 words"))
 	}
 
@@ -66,7 +66,7 @@ func validateHideArgs(c *hideConfig) error {
 }
 
 func parseRevealArgs(c *revealConfig, args []string, stderr io.Writer) error {
-	fs := flag.NewFlagSet("imgp", flag.ContinueOnError)
+	fs := flag.NewFlagSet("imgn", flag.ContinueOnError)
 	fs.SetOutput(stderr)
 
 	fs.Usage = func() {
