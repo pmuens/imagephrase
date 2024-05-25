@@ -40,6 +40,22 @@ func HideInImage(imgPath string, mnemonic string) (string, error) {
 	return newImgPath, nil
 }
 
+func RevealFromImage(imgPath string) (string, error) {
+	image, err := LoadImage(imgPath)
+	if err != nil {
+		return "", err
+	}
+
+	numbers := extractNumbersFromPixels(image)
+
+	words, err := IntsToWords(numbers)
+	if err != nil {
+		return "", err
+	}
+
+	return strings.Join(words, " "), nil
+}
+
 // See: https://stackoverflow.com/a/6059487
 func hideNumbersInPixels(numbers []int, image Image) error {
 	// TODO: Add support for hiding information in more than one row of pixels.
@@ -75,4 +91,45 @@ func hideNumbersInPixels(numbers []int, image Image) error {
 	}
 
 	return nil
+}
+
+func extractNumbersFromPixels(image Image) []int {
+	// TODO: Add support for hiding information in more than one row of pixels.
+	row := image.Pixels[0]
+
+	numbers := make([]int, WordsInMnemonic)
+
+	for i := range WordsInMnemonic {
+		// Grab 4 pixels.
+		low := i * PixelsPerWord
+		high := low + PixelsPerWord
+		chunk := row[low:high]
+
+		index := 0
+
+		// Reconstruct number by extracting LSbs from pixels
+		k := 1
+		number := 0b0
+		for j := 0; j < WordBitLength; j += LsbsPerPixel {
+			pixel := chunk[index]
+
+			// Red.
+			number += (k * (pixel.R & 1))
+			k <<= 1
+
+			// Green.
+			number += (k * (pixel.G & 1))
+			k <<= 1
+
+			// Blue.
+			number += (k * (pixel.B & 1))
+			k <<= 1
+
+			index++
+		}
+
+		numbers[i] = number
+	}
+
+	return numbers
 }

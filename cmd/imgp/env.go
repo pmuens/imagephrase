@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"strings"
+
+	"github.com/pmuens/imagephrase/imgp"
 )
 
 type env struct {
@@ -56,7 +58,7 @@ func validateHideArgs(c *hideConfig) error {
 		return argError(c.mnemonic, "flag -mnemonic", errors.New("should not be empty"))
 	}
 
-	if words := strings.Fields(c.mnemonic); len(words) != 12 {
+	if words := strings.Fields(c.mnemonic); len(words) != imgp.WordsInMnemonic {
 		return argError(c.mnemonic, "mnemonic", errors.New("should be 12 words"))
 	}
 

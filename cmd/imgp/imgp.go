@@ -65,7 +65,12 @@ func runHide(e *env, c *hideConfig) error {
 }
 
 func runReveal(e *env, c *revealConfig) error {
-	fmt.Fprintf(e.stdout, "Image Path:\t%s\n", c.imgPath)
+	mnemonic, err := imgp.RevealFromImage(c.imgPath)
+	if err != nil {
+		return err
+	}
+
+	fmt.Fprintf(e.stdout, "Mnemonic is: %s\n", mnemonic)
 
 	return nil
 }

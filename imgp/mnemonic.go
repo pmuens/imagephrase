@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+const WordsInMnemonic = 12
+
 //go:embed words.txt
 var wordList string
 var wordToInt map[string]int
