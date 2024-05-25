@@ -94,7 +94,7 @@ func extractNumbersFromPixels(image Image) []int {
 	numbers := make([]int, WordsInMnemonic)
 
 	for i := range WordsInMnemonic {
-		// Reconstruct number by extracting LSbs from pixels
+		// Reconstruct number by extracting LSbs from pixels.
 		k := 1
 		number := 0b0
 		for j := 0; j < WordBitLength; j += LsbsPerPixel {
