@@ -2,6 +2,7 @@ package imgp
 
 import (
 	"image"
+	"image/color"
 	"image/png"
 	"os"
 )
@@ -17,6 +18,13 @@ type Image struct {
 	Width  int
 	Height int
 	Pixels [][]Pixel
+}
+
+type RGBA struct {
+	R uint8
+	G uint8
+	B uint8
+	A uint8
 }
 
 // See: https://stackoverflow.com/a/41185404
@@ -55,11 +63,49 @@ func LoadImage(path string) (Image, error) {
 	return result, nil
 }
 
+// See: https://yourbasic.org/golang/create-image
+func SaveImage(path string, img Image) error {
+	topLeft := image.Point{0, 0}
+	bottomRight := image.Point{img.Width, img.Height}
+
+	result := image.NewRGBA(image.Rectangle{topLeft, bottomRight})
+
+	for x := 0; x < img.Width; x++ {
+		for y := 0; y < img.Height; y++ {
+			rgba := pixelToRgba(img.Pixels[x][y])
+			result.Set(x, y, color.RGBA{
+				R: rgba.R,
+				G: rgba.G,
+				B: rgba.B,
+				A: rgba.A,
+			})
+		}
+	}
+
+	file, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	png.Encode(file, result)
+
+	return nil
+}
+
 func rgbaToPixel(r, g, b, a uint32) Pixel {
 	return Pixel{
 		R: int(r / 257),
 		G: int(g / 257),
 		B: int(b / 257),
 		A: int(a / 257),
+	}
+}
+
+func pixelToRgba(pixel Pixel) RGBA {
+	return RGBA{
+		R: uint8(pixel.R),
+		G: uint8(pixel.G),
+		B: uint8(pixel.B),
+		A: uint8(pixel.A),
 	}
 }
