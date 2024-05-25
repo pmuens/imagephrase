@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"os"
+
+	"github.com/pmuens/imagephrase/imgp"
 )
 
 const (
@@ -52,8 +54,12 @@ func run(e *env) error {
 }
 
 func runHide(e *env, c *hideConfig) error {
-	fmt.Fprintf(e.stdout, "Image Path:\t%s\n", c.imgPath)
-	fmt.Fprintf(e.stdout, "Mnemonic:\t%s\n", c.mnemonic)
+	imgPath, err := imgp.HideInImage(c.imgPath, c.mnemonic)
+	if err != nil {
+		return err
+	}
+
+	fmt.Fprintf(e.stdout, "Mnemonic successfully hidden in %s\n", imgPath)
 
 	return nil
 }
